@@ -57,6 +57,34 @@ export class WeatherCardEditor extends LitElement {
     return this._config.forecast !== false;
   }
 
+  get _hide_humidity() {
+    return this._config.hide_humidity !== false;
+  }
+
+  get _hide_wind() {
+    return this._config.hide_wind !== false;
+  }
+
+  get _hide_pressure() {
+    return this._config.hide_pressure !== false;
+  }
+
+  get _hide_visibility() {
+    return this._config.hide_visibility !== false;
+  }
+
+  get _hide_sunrise_sunset() {
+    return this._config.hide_sunrise_sunset !== false;
+  }
+
+  get _hide_precipitation() {
+    return this._config.hide_precipitation !== false;
+  }
+
+  get _hide_precipitation_probability() {
+    return this._config.hide_precipitation_probability !== false;
+  }
+
   get _hourly_forecast() {
     return this._config.hourly_forecast !== false;
   }
@@ -92,7 +120,7 @@ export class WeatherCardEditor extends LitElement {
             @value-changed="${this._valueChanged}"
           ></paper-input>
           <paper-input
-            label="Icons location"
+            label="Location of iconså"
             .value="${this._icons}"
             .configValue="${"icons"}"
             @value-changed="${this._valueChanged}"
@@ -110,7 +138,7 @@ export class WeatherCardEditor extends LitElement {
               `
             : html`
                 <paper-dropdown-menu
-                  label="Entity"
+                  label="Entity (Required)"
                   @value-changed="${this._valueChanged}"
                   .configValue="${"entity"}"
                 >
@@ -159,14 +187,73 @@ export class WeatherCardEditor extends LitElement {
             </div>
           </div>
           <paper-input
-            label="Number of future forcasts"
+            label="Number of forecast fields"
             type="number"
             min="1"
             max="8"
             value=${this._number_of_forecasts}
             .configValue="${"number_of_forecasts"}"
             @value-changed="${this._valueChanged}"
+            (("${"hourly_forecast"}" == 'false' && "${"forecast"}" == 'false') ? 'style="display:none;"' : '')
           ></paper-input>
+          <div class="switches" ` + (details == false ? 'style="display:none;"' : '') + `>
+            <div class="switch">
+              <ha-switch
+                .checked=${this._hide_humidity}
+                .configValue="${"hide_humidity"}"
+                @change="${this._valueChanged}"
+              ></ha-switch
+              ><span>Show humidity</span>
+            </div>
+            <div class="switch">
+              <ha-switch
+                .checked=${this._hide_wind}
+                .configValue="${"hide_wind"}"
+                @change="${this._valueChanged}"
+              ></ha-switch
+              ><span>Show wind speed/bearing</span>
+            </div>
+            <div class="switch">
+              <ha-switch
+                .checked=${this._hide_pressure}
+                .configValue="${"hide_pressure"}"
+                @change="${this._valueChanged}"
+              ></ha-switch
+              ><span>Show pressure</span>
+            </div>
+            <div class="switch">
+              <ha-switch
+                .checked=${this._hide_visibility}
+                .configValue="${"hide_visibility"}"
+                @change="${this._valueChanged}"
+              ></ha-switch
+              ><span>Show visibility</span>
+            </div>
+            <div class="switch">
+              <ha-switch
+                .checked=${this._hide_sunrise_sunset}
+                .configValue="${"hide_sunrise_sunset"}"
+                @change="${this._valueChanged}"
+              ></ha-switch
+              ><span>Show sunrise/sunset times</span>
+            </div>
+            <div class="switch">
+              <ha-switch
+                .checked=${this._hide_precipitation}
+                .configValue="${"hide_precipitation"}"
+                @change="${this._valueChanged}"
+              ></ha-switch
+              ><span>Show precipitation</span>
+            </div>
+            <div class="switch">
+              <ha-switch
+                .checked=${this._hide_precipitation_probability}
+                .configValue="${"hide_precipitation_probability"}"
+                @change="${this._valueChanged}"
+              ></ha-switch
+              ><span>Show precipitation probability</span>
+            </div>
+          </div>
         </div>
       </div>
     `;

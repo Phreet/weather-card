@@ -178,17 +178,17 @@ class WeatherCard extends LitElement {
   renderDetails(stateObj, lang) {
     this.numberElements++;
 
-    if (stateObj.attributes.humidity != null || !this._config.hide_humidity) {
+    if (stateObj.attributes.humidity !== null && stateObj.attributes.humidity !== unknown && !this._config.hide_humidity) {
       items.push(html`
         <ha-icon icon="mdi:water-percent"></ha-icon>
         ${stateObj.attributes.humidity}<span class="unit"> % </span>
       `);
     }
 
-    if (stateObj.attributes.wind_speed != null || !this._config.hide_wind) {
+    if (stateObj.attributes.wind_speed !== null && stateObj.attributes.wind_speed !== unknown && !this._config.hide_wind) {
       items.push(html`
         <ha-icon icon="mdi:weather-windy"></ha-icon>
-        ${stateObj.attributes.wind_bearing != null
+        ${stateObj.attributes.wind_bearing !== null && stateObj.attributes.wind_bearing !== unknown
           ? windDirections[
               parseInt((stateObj.attributes.wind_bearing + 11.25) / 22.5)
             ]
@@ -199,7 +199,7 @@ class WeatherCard extends LitElement {
       `);
     }
 
-    if (stateObj.attributes.pressure != null || !this._config.hide_pressure) {
+    if (stateObj.attributes.pressure !== null && stateObj.attributes.pressure !== unknown && !this._config.hide_pressure) {
       items.push(html`
         <ha-icon icon="mdi:gauge"></ha-icon>
         ${stateObj.attributes.pressure}
@@ -207,7 +207,7 @@ class WeatherCard extends LitElement {
       `);
     }
 
-    if (stateObj.attributes.visibility != null || !this._config.hide_visibility) {
+    if (stateObj.attributes.visibility !== null && stateObj.attributes.visibility !== unknown && !this._config.hide_visibility) {
       items.push(html`
         <ha-icon icon="mdi:weather-fog"></ha-icon> ${stateObj.attributes
           .visibility}<span class="unit"> ${this.getUnit("length")} </span>
@@ -292,18 +292,14 @@ class WeatherCard extends LitElement {
                       </div>
                     `
                   : ""}
-                ${!this._config.hide_precipitation &&
-                daily.precipitation !== undefined &&
-                daily.precipitation !== null
+                ${!this._config.hide_precipitation && daily.precipitation !== undefined && daily.precipitation !== null
                   ? html`
                       <div class="precipitation">
                         ${Math.round(daily.precipitation*10)/10} ${this.getUnit("precipitation")}
                       </div>
                     `
                   : ""}
-                ${(!this._config.hide_precipitation || !this._config_hide_precipitation_probability) &&
-                daily.precipitation_probability !== undefined &&
-                daily.precipitation_probability !== null
+                ${(!this._config.hide_precipitation || !this._config.hide_precipitation_probability) && daily.precipitation_probability !== undefined && daily.precipitation_probability !== null
                   ? html`
                       <div class="precipitation_probability">
                         ${Math.round(daily.precipitation_probability)} ${this.getUnit("precipitation_probability")}
@@ -321,7 +317,7 @@ class WeatherCard extends LitElement {
     return `${
       this._config.icons
         ? this._config.icons
-        : "https://cdn.jsdelivr.net/gh/bramkragten/weather-card/dist/icons/"
+        : "/local/community/weather-card/icons/"
     }${
       sun && sun.state == "below_horizon"
         ? weatherIconsNight[condition]
