@@ -1,3 +1,11 @@
+# Weather icons
+
+## Resource
+
+https://www.amcharts.com/free-animated-svg-weather-icons/
+
+## Disclaimer
+
 The works contained in this archive were created by amCharts (https://www.amcharts.com/)
 and is licensed under Creative Commons Attribution 4.0 International Public License:
 

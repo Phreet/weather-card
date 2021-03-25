@@ -117,14 +117,14 @@ export class WeatherCardEditor extends LitElement {
             label="Name"
             .value="${this._name}"
             .configValue="${"name"}"
-            @value-changed="${this._valueChanged}"
-          ></paper-input>
+            @value-changed="${this._valueChanged}">
+          </paper-input>
           <paper-input
             label="Location of icons (optional)"
             .value="${this._icons}"
             .configValue="${"icons"}"
-            @value-changed="${this._valueChanged}"
-          ></paper-input>
+            @value-changed="${this._valueChanged}">
+          </paper-input>
           ${customElements.get("ha-entity-picker")
             ? html`
                 <ha-entity-picker
@@ -133,19 +133,17 @@ export class WeatherCardEditor extends LitElement {
                   .configValue=${"entity"}
                   domain-filter="weather"
                   @change="${this._valueChanged}"
-                  allow-custom-entity
-                ></ha-entity-picker>
+                  allow-custom-entity>
+                  </ha-entity-picker>
               `
             : html`
                 <paper-dropdown-menu
                   label="Entity (Required)"
                   @value-changed="${this._valueChanged}"
-                  .configValue="${"entity"}"
-                >
+                  .configValue="${"entity"}">
                   <paper-listbox
                     slot="dropdown-content"
-                    .selected="${entities.indexOf(this._entity)}"
-                  >
+                    .selected="${entities.indexOf(this._entity)}">
                     ${entities.map((entity) => {
                       return html` <paper-item>${entity}</paper-item> `;
                     })}
@@ -157,33 +155,33 @@ export class WeatherCardEditor extends LitElement {
               <ha-switch
                 .checked=${this._current}
                 .configValue="${"current"}"
-                @change="${this._valueChanged}"
-              ></ha-switch
-              ><span>Show current</span>
+                @change="${this._valueChanged}">
+              </ha-switch>
+              <span>Show current</span>
             </div>
             <div class="switch">
               <ha-switch
                 .checked=${this._details}
                 .configValue="${"details"}"
-                @change="${this._valueChanged}"
-              ></ha-switch
-              ><span>Show details</span>
+                @change="${this._valueChanged}">
+              </ha-switch>
+              <span>Show details</span>
             </div>
             <div class="switch">
               <ha-switch
                 .checked=${this._forecast}
                 .configValue="${"forecast"}"
-                @change="${this._valueChanged}"
-              ></ha-switch
-              ><span>Show forecast</span>
+                @change="${this._valueChanged}">
+              </ha-switch>
+              <span>Show forecast</span>
             </div>
             <div class="switch">
               <ha-switch
                 .checked=${this._hourly_forecast}
                 .configValue="${"hourly_forecast"}"
-                @change="${this._valueChanged}"
-              ></ha-switch
-              ><span>Show hourly forecast</span>
+                @change="${this._valueChanged}">
+              </ha-switch>
+              <span>Show hourly forecast</span>
             </div>
           </div>
           <paper-input
@@ -193,64 +191,64 @@ export class WeatherCardEditor extends LitElement {
             max="8"
             value=${this._number_of_forecasts}
             .configValue="${"number_of_forecasts"}"
-            @value-changed="${this._valueChanged}"
-          ></paper-input>
-          <div class="switches" ` + (details == false ? 'style="display:none;"' : '') + `>
+            @value-changed="${this._valueChanged}">
+          </paper-input>
+          <div class="switches">
             <div class="switch">
               <ha-switch
                 .checked=${this._hide_humidity}
                 .configValue="${"hide_humidity"}"
-                @change="${this._valueChanged}"
-              ></ha-switch
-              ><span>Show humidity</span>
+                @change="${this._valueChanged}">
+              </ha-switch>
+              <span>Show humidity</span>
             </div>
             <div class="switch">
               <ha-switch
                 .checked=${this._hide_wind}
                 .configValue="${"hide_wind"}"
-                @change="${this._valueChanged}"
-              ></ha-switch
-              ><span>Show wind speed/bearing</span>
+                @change="${this._valueChanged}">
+              </ha-switch>
+              <span>Show wind speed/bearing</span>
             </div>
             <div class="switch">
               <ha-switch
                 .checked=${this._hide_pressure}
                 .configValue="${"hide_pressure"}"
-                @change="${this._valueChanged}"
-              ></ha-switch
-              ><span>Show pressure</span>
+                @change="${this._valueChanged}">
+              </ha-switch>
+              <span>Show pressure</span>
             </div>
             <div class="switch">
               <ha-switch
                 .checked=${this._hide_visibility}
                 .configValue="${"hide_visibility"}"
-                @change="${this._valueChanged}"
-              ></ha-switch
-              ><span>Show visibility</span>
+                @change="${this._valueChanged}">
+              </ha-switch>
+              <span>Show visibility</span>
             </div>
             <div class="switch">
               <ha-switch
                 .checked=${this._hide_sunrise_sunset}
                 .configValue="${"hide_sunrise_sunset"}"
-                @change="${this._valueChanged}"
-              ></ha-switch
-              ><span>Show sunrise/sunset times</span>
+                @change="${this._valueChanged}">
+              </ha-switch>
+              <span>Show sunrise/sunset times</span>
             </div>
             <div class="switch">
               <ha-switch
                 .checked=${this._hide_precipitation}
                 .configValue="${"hide_precipitation"}"
-                @change="${this._valueChanged}"
-              ></ha-switch
-              ><span>Show precipitation</span>
+                @change="${this._valueChanged}">
+              </ha-switch>
+              <span>Show precipitation</span>
             </div>
             <div class="switch">
               <ha-switch
                 .checked=${this._hide_precipitation_probability}
                 .configValue="${"hide_precipitation_probability"}"
-                @change="${this._valueChanged}"
-              ></ha-switch
-              ><span>Show precipitation probability</span>
+                @change="${this._valueChanged}">
+              </ha-switch>
+              <span>Show precipitation probability</span>
             </div>
           </div>
         </div>
