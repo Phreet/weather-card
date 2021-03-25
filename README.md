@@ -8,17 +8,11 @@ This card uses the awesome [animated SVG weather icons by amCharts](https://www.
 
 Thanks for all picking this card up.
 
-## Installation:
+## Installation
 
 You have 2 options, hosted or self hosted (manual). The first option needs internet and will update itself.
 
-### If you are using Firefox:
-
-Firefox < 66 does not support all the needed functions yet for the editor.
-You change this by enabling `javascript.options.dynamicImport` in `about:config`.
-Or use the version without the editor: [Version without editor](https://raw.githubusercontent.com/bramkragten/custom-ui/58c41ad177b002e149497629a26ea10ccfeebcd0/weather-card/weather-card.js)
-
-# Hosted:
+### Hosted
 
 Add the following to resources in your lovelace config:
 
@@ -27,7 +21,7 @@ Add the following to resources in your lovelace config:
   type: module
 ```
 
-# Manual:
+### Manual
 
 1. Download the [weather-card.js](https://raw.githubusercontent.com/bramkragten/weather-card/v1.2.0/dist/weather-card.js) to `/config/www/custom-lovelace/weather-card/`. (or an other folder in `/config/www/`)
 2. Save, the [amCharts icons](https://www.amcharts.com/free-animated-svg-weather-icons/) (The contents of the folder "animated") under `/config/www/custom-lovelace/weather-card/icons/` (or an other folder in `/config/www/`)
@@ -41,7 +35,7 @@ resources:
     type: module
 ```
 
-## Configuration:
+## Configuration
 
 And add a card with type `custom:weather-card`:
 
@@ -59,7 +53,7 @@ entity: weather.yourweatherentity
 icons: "/local/custom-lovelace/weather-card/icons/"
 ```
 
-You can choose wich elements of the weather card you want to show:
+You can choose which elements of the weather card you want to show:
 
 The 3 different rows, being:
 
@@ -75,6 +69,13 @@ details: false
 forecast: true
 hourly_forecast: false
 number_of_forecasts: 5
+hide_humidity: false
+hide_wind: false
+hide_precipitation: true
+hide_precipitation_probability: true
+hide_pressure: false
+hide_visibility: false
+hide_sunrise_sunset: false
 ```
 
 If you want to show the sunrise and sunset times, make sure the `sun` component is enabled:
@@ -84,21 +85,9 @@ If you want to show the sunrise and sunset times, make sure the `sun` component 
 sun:
 ```
 
-### Dark Sky:
+### OpenWeatherMap
 
-When using Dark Sky you should put the mode to `daily` if you want a daily forecast with highs and lows.
-
-```yaml
-# Example configuration.yaml entry
-weather:
-  - platform: darksky
-    api_key: YOUR_API_KEY
-    mode: daily
-```
-
-### OpenWeather Map:
-
-When using OpenWeather map you can select hourly(default) or daily forecast to show.
+When using OpenWeatherMap you can select hourly(default) or daily forecast to show.
 
 ```yaml
 # Example configuration.yaml entry

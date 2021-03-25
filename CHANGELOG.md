@@ -1,17 +1,16 @@
-## 1.2.0
+# Changelog
 
-- Added UI editor
-- Hide forecast when not available
+## 1.6.0
 
-## 1.1.0
-
-- Added sun rise and set times
-- Added option for `name`
-- Some styling tweaks
-
-## 1.0.1
-
-- Added state `clear-night` @AVirtualL
-- Fixes for RTL @AVirtualL
-- Used local Lit @iantrich
-- Use hosted icons, option to use local icons with `icons:`
+- Handle attributes not being present on the weather entity
+- Add option to show/hide attributes
+  - Show/hide precipitation probability
+  - Show/hide wind speed / wind bearing
+  - Show/hide humidity
+  - Show/hide pressure
+  - Show/hide visibility
+  - Show/hide sunrise/sunset
+- Use hass.language for formatting sun rising/setting
+- Reduce precision in time format to hours and minutes
+- Changed all references to new repo
+- Added documentation to README

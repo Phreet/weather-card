@@ -55,7 +55,7 @@ window.customCards.push({
   name: "Weather Card",
   description: "A custom weather card with animated icons.",
   preview: true,
-  documentationURL: "https://github.com/bramkragten/weather-card",
+  documentationURL: "https://github.com/Phreet/weather-card",
 });
 
 const fireEvent = (node, type, detail, options) => {
@@ -127,31 +127,23 @@ class WeatherCard extends LitElement {
 
     this.numberElements = 0;
 
+    const lang = this.hass.selectedLanguage || this.hass.language;
     const stateObj = this.hass.states[this._config.entity];
 
     if (!stateObj) {
       return html`
-        <style>
-          .not-found {
-            flex: 1;
-            background-color: yellow;
-            padding: 8px;
-          }
-        </style>
-        <ha-card>
-          <div class="not-found">
+        <hui-warning>
             Entity not available: ${this._config.entity}
-          </div>
-        </ha-card>
+        </hui-warning>
       `;
     }
 
     return html`
       <ha-card @click="${this._handleClick}">
-        ${this._config.current !== false ? this.renderCurrent(stateObj) : ""}
-        ${this._config.details !== false ? this.renderDetails(stateObj) : ""}
+        ${this._config.current !== false ? this.renderCurrent(stateObj, lang) : ""}
+        ${this._config.details !== false ? this.renderDetails(stateObj, lang) : ""}
         ${this._config.forecast !== false
-          ? this.renderForecast(stateObj.attributes.forecast)
+          ? this.renderForecast(stateObj.attributes.forecast, lang)
           : ""}
       </ha-card>
     `;
@@ -183,71 +175,83 @@ class WeatherCard extends LitElement {
     `;
   }
 
-  renderDetails(stateObj) {
-    const sun = this.hass.states["sun.sun"];
-    let next_rising;
-    let next_setting;
+  renderDetails(stateObj, lang) {
+    this.numberElements++;
 
-    if (sun) {
-      next_rising = new Date(sun.attributes.next_rising);
-      next_setting = new Date(sun.attributes.next_setting);
+    if (stateObj.attributes.humidity != null || !this._config.hide_humidity) {
+      items.push(html`
+        <ha-icon icon="mdi:water-percent"></ha-icon>
+        ${stateObj.attributes.humidity}<span class="unit"> % </span>
+      `);
     }
 
-    this.numberElements++;
+    if (stateObj.attributes.wind_speed != null || !this._config.hide_wind) {
+      items.push(html`
+        <ha-icon icon="mdi:weather-windy"></ha-icon>
+        ${stateObj.attributes.wind_bearing != null
+          ? windDirections[
+              parseInt((stateObj.attributes.wind_bearing + 11.25) / 22.5)
+            ]
+          : ""}
+        ${stateObj.attributes.wind_speed}<span class="unit">
+          ${this.getUnit("length")}/h
+        </span>
+      `);
+    }
+
+    if (stateObj.attributes.pressure != null || !this._config.hide_pressure) {
+      items.push(html`
+        <ha-icon icon="mdi:gauge"></ha-icon>
+        ${stateObj.attributes.pressure}
+        <span class="unit"> ${this.getUnit("air_pressure")} </span>
+      `);
+    }
+
+    if (stateObj.attributes.visibility != null || !this._config.hide_visibility) {
+      items.push(html`
+        <ha-icon icon="mdi:weather-fog"></ha-icon> ${stateObj.attributes
+          .visibility}<span class="unit"> ${this.getUnit("length")} </span>
+      `);
+    }
+
+    const sun = this.hass.states['sun.sun'];
+    if (sun || !this._config.hide_sunrise_sunset) {
+      const next_rising = new Date(sun.attributes.next_rising).toLocaleTimeString(lang, {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      const next_setting = new Date(sun.attributes.next_setting).toLocaleTimeString(lang, {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+
+      if (items.length % 2 == 1) {
+        items.push(html`<div />`);
+      }
+
+      items.push(html`
+        <ha-icon icon="mdi:weather-sunset-up"></ha-icon>
+        ${next_rising}
+      `);
+      items.push(html`
+        <ha-icon icon="mdi:weather-sunset-down"></ha-icon>
+        ${next_setting}
+      `);
+    }
+
+    const listItems = items.map(item => html`<li>${item}</li>`);
 
     return html`
       <ul class="variations ${this.numberElements > 1 ? "spacer" : ""}">
-        <li>
-          <ha-icon icon="mdi:water-percent"></ha-icon>
-          ${stateObj.attributes.humidity}<span class="unit"> % </span>
-        </li>
-        <li>
-          <ha-icon icon="mdi:weather-windy"></ha-icon> ${windDirections[
-            parseInt((stateObj.attributes.wind_bearing + 11.25) / 22.5)
-          ]}
-          ${stateObj.attributes.wind_speed}<span class="unit">
-            ${this.getUnit("length")}/h
-          </span>
-        </li>
-        <li>
-          <ha-icon icon="mdi:gauge"></ha-icon>
-          ${stateObj.attributes.pressure}
-          <span class="unit">
-            ${this.getUnit("air_pressure")}
-          </span>
-        </li>
-        <li>
-          <ha-icon icon="mdi:weather-fog"></ha-icon> ${stateObj.attributes
-            .visibility}<span class="unit">
-            ${this.getUnit("length")}
-          </span>
-        </li>
-        ${next_rising
-          ? html`
-              <li>
-                <ha-icon icon="mdi:weather-sunset-up"></ha-icon>
-                ${next_rising.toLocaleTimeString()}
-              </li>
-            `
-          : ""}
-        ${next_setting
-          ? html`
-              <li>
-                <ha-icon icon="mdi:weather-sunset-down"></ha-icon>
-                ${next_setting.toLocaleTimeString()}
-              </li>
-            `
-          : ""}
+        ${listItems}
       </ul>
     `;
   }
 
-  renderForecast(forecast) {
+  renderForecast(forecast, lang) {
     if (!forecast || forecast.length === 0) {
       return html``;
     }
-
-    const lang = this.hass.selectedLanguage || this.hass.language;
 
     this.numberElements++;
     return html`
@@ -297,7 +301,7 @@ class WeatherCard extends LitElement {
                       </div>
                     `
                   : ""}
-                ${!this._config.hide_precipitation &&
+                ${(!this._config.hide_precipitation || !this._config_hide_precipitation_probability) &&
                 daily.precipitation_probability !== undefined &&
                 daily.precipitation_probability !== null
                   ? html`
