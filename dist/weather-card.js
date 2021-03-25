@@ -178,17 +178,17 @@ class WeatherCard extends LitElement {
   renderDetails(stateObj, lang) {
     this.numberElements++;
 
-    if (stateObj.attributes.humidity !== null && stateObj.attributes.humidity !== unknown && !this._config.hide_humidity) {
+    if (stateObj.attributes.humidity !== null && stateObj.attributes.humidity !== undefined && !this._config.hide_humidity) {
       items.push(html`
         <ha-icon icon="mdi:water-percent"></ha-icon>
         ${stateObj.attributes.humidity}<span class="unit"> % </span>
       `);
     }
 
-    if (stateObj.attributes.wind_speed !== null && stateObj.attributes.wind_speed !== unknown && !this._config.hide_wind) {
+    if (stateObj.attributes.wind_speed !== null && stateObj.attributes.wind_speed !== undefined && !this._config.hide_wind) {
       items.push(html`
         <ha-icon icon="mdi:weather-windy"></ha-icon>
-        ${stateObj.attributes.wind_bearing !== null && stateObj.attributes.wind_bearing !== unknown
+        ${stateObj.attributes.wind_bearing !== null && stateObj.attributes.wind_bearing !== undefined
           ? windDirections[
               parseInt((stateObj.attributes.wind_bearing + 11.25) / 22.5)
             ]
@@ -199,7 +199,7 @@ class WeatherCard extends LitElement {
       `);
     }
 
-    if (stateObj.attributes.pressure !== null && stateObj.attributes.pressure !== unknown && !this._config.hide_pressure) {
+    if (stateObj.attributes.pressure !== null && stateObj.attributes.pressure !== undefined && !this._config.hide_pressure) {
       items.push(html`
         <ha-icon icon="mdi:gauge"></ha-icon>
         ${stateObj.attributes.pressure}
@@ -207,7 +207,7 @@ class WeatherCard extends LitElement {
       `);
     }
 
-    if (stateObj.attributes.visibility !== null && stateObj.attributes.visibility !== unknown && !this._config.hide_visibility) {
+    if (stateObj.attributes.visibility !== null && stateObj.attributes.visibility !== undefined && !this._config.hide_visibility) {
       items.push(html`
         <ha-icon icon="mdi:weather-fog"></ha-icon> ${stateObj.attributes
           .visibility}<span class="unit"> ${this.getUnit("length")} </span>

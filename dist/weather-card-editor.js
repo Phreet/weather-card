@@ -120,7 +120,7 @@ export class WeatherCardEditor extends LitElement {
             @value-changed="${this._valueChanged}"
           ></paper-input>
           <paper-input
-            label="Location of iconså"
+            label="Location of icons (optional)"
             .value="${this._icons}"
             .configValue="${"icons"}"
             @value-changed="${this._valueChanged}"
@@ -194,7 +194,6 @@ export class WeatherCardEditor extends LitElement {
             value=${this._number_of_forecasts}
             .configValue="${"number_of_forecasts"}"
             @value-changed="${this._valueChanged}"
-            (("${"hourly_forecast"}" == 'false' && "${"forecast"}" == 'false') ? 'style="display:none;"' : '')
           ></paper-input>
           <div class="switches" ` + (details == false ? 'style="display:none;"' : '') + `>
             <div class="switch">
