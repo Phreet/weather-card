@@ -226,6 +226,8 @@ export class WeatherCardEditor extends LitElement {
               </ha-switch>
               <span>Show visibility</span>
             </div>
+          </div>
+          <div class="switches">
             <div class="switch">
               <ha-switch
                 .checked=${this._hide_sunrise_sunset}
