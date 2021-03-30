@@ -11,17 +11,13 @@ const fireEvent = (node, type, detail, options) => {
   return event;
 };
 
-if (
-  !customElements.get("ha-switch") &&
-  customElements.get("paper-toggle-button")
-) {
+if (!customElements.get("ha-switch") && customElements.get("paper-toggle-button")) {
   customElements.define("ha-switch", customElements.get("paper-toggle-button"));
 }
 
 const LitElement = customElements.get("hui-masonry-view") ? Object.getPrototypeOf(customElements.get("hui-masonry-view")) : Object.getPrototypeOf(customElements.get("hui-view"));
 const html = LitElement.prototype.html;
 const css = LitElement.prototype.css;
-
 const HELPERS = window.loadCardHelpers();
 
 export class WeatherCardEditor extends LitElement {
@@ -200,7 +196,7 @@ export class WeatherCardEditor extends LitElement {
                 .configValue="${"hide_humidity"}"
                 @change="${this._valueChanged}">
               </ha-switch>
-              <span>Show humidity</span>
+              <span>Hide humidity</span>
             </div>
             <div class="switch">
               <ha-switch
@@ -208,7 +204,7 @@ export class WeatherCardEditor extends LitElement {
                 .configValue="${"hide_wind"}"
                 @change="${this._valueChanged}">
               </ha-switch>
-              <span>Show wind speed/bearing</span>
+              <span>Hide wind speed/bearing</span>
             </div>
             <div class="switch">
               <ha-switch
@@ -216,15 +212,7 @@ export class WeatherCardEditor extends LitElement {
                 .configValue="${"hide_pressure"}"
                 @change="${this._valueChanged}">
               </ha-switch>
-              <span>Show pressure</span>
-            </div>
-            <div class="switch">
-              <ha-switch
-                .checked=${this._hide_visibility}
-                .configValue="${"hide_visibility"}"
-                @change="${this._valueChanged}">
-              </ha-switch>
-              <span>Show visibility</span>
+              <span>Hide pressure</span>
             </div>
           </div>
           <div class="switches">
@@ -234,15 +222,25 @@ export class WeatherCardEditor extends LitElement {
                 .configValue="${"hide_sunrise_sunset"}"
                 @change="${this._valueChanged}">
               </ha-switch>
-              <span>Show sunrise/sunset times</span>
+              <span>Hide sunrise/sunset times</span>
             </div>
+            <div class="switch">
+            <ha-switch
+              .checked=${this._hide_visibility}
+              .configValue="${"hide_visibility"}"
+              @change="${this._valueChanged}">
+            </ha-switch>
+            <span>Hide visibility</span>
+          </div>
+          </div>
+          <div class="switches">
             <div class="switch">
               <ha-switch
                 .checked=${this._hide_precipitation}
                 .configValue="${"hide_precipitation"}"
                 @change="${this._valueChanged}">
               </ha-switch>
-              <span>Show precipitation</span>
+              <span>Hide precipitation</span>
             </div>
             <div class="switch">
               <ha-switch
@@ -250,7 +248,7 @@ export class WeatherCardEditor extends LitElement {
                 .configValue="${"hide_precipitation_probability"}"
                 @change="${this._valueChanged}">
               </ha-switch>
-              <span>Show precipitation probability</span>
+              <span>Hide precipitation probability</span>
             </div>
           </div>
         </div>
