@@ -2,31 +2,39 @@ const LitElement = customElements.get("hui-masonry-view") ? Object.getPrototypeO
 const html = LitElement.prototype.html;
 const css = LitElement.prototype.css;
 
-const weatherIconsDay = {
-  clear: "day",
-  "clear-night": "night",
+const weatherIcons = {
   cloudy: "cloudy",
-  fog: "cloudy",
-  hail: "rainy-7",
-  lightning: "thunder",
-  "lightning-rainy": "thunder",
-  partlycloudy: "cloudy-day-3",
-  pouring: "rainy-6",
-  rainy: "rainy-5",
-  snowy: "snowy-6",
-  "snowy-rainy": "rainy-7",
-  sunny: "day",
-  windy: "cloudy",
-  "windy-variant": "cloudy-day-3",
-  exceptional: "!!",
+  hail: "hail",
+  pouring: "rain",
+  drizzle: "drizzle",
+  snowy: "snow",
+  "snowy-rainy": "sleet",
+  windy: "wind",
+  "windy-variant": "overcast"
+}
+
+const weatherIconsDay = {
+  ...weatherIcons,
+  clear: "clear-day",
+  sunny: "clear-day",
+  overcast: "overcast-day",
+  fog: "fog-day",
+  lightning: "thunderstorms-day",
+  "lightning-rainy": "thunderstorms-day-rain",
+  partlycloudy: "partly-cloudy-day",
+  rainy: "partly-cloudy-day-rain"
 };
 
 const weatherIconsNight = {
-  ...weatherIconsDay,
-  clear: "night",
-  sunny: "night",
-  partlycloudy: "cloudy-night-3",
-  "windy-variant": "cloudy-night-3",
+  ...weatherIcons,
+  clear: "clear-night",
+  sunny: "clear-night",
+  overcast: "overcast-night",
+  fog: "fog-night",
+  lightning: "thunderstorms-night",
+  "lightning-rainy": "thunderstorms-night-rain", 
+  partlycloudy: "partly-cloudy-night",
+  rainy: "partly-cloudy-night-rain"
 };
 
 const windDirections = [
@@ -55,7 +63,7 @@ window.customCards.push({
   name: "Weather Card",
   description: "🌧 Customizable weather card with animated icons",
   preview: true,
-  documentationURL: "https://github.com/Phreet/weather-card",
+  documentationURL: "https://github.com/Ph/weather-card",
 });
 
 const fireEvent = (node, type, detail, options) => {
@@ -127,23 +135,31 @@ class WeatherCard extends LitElement {
 
     this.numberElements = 0;
 
-    const lang = this.hass.selectedLanguage || this.hass.language;
     const stateObj = this.hass.states[this._config.entity];
 
     if (!stateObj) {
       return html`
-        <hui-warning>
+        <style>
+          .not-found {
+            flex: 1;
+            background-color: yellow;
+            padding: 8px;
+          }
+        </style>
+        <ha-card>
+          <div class="not-found">
             Entity not available: ${this._config.entity}
-        </hui-warning>
+          </div>
+        </ha-card>
       `;
     }
 
     return html`
       <ha-card @click="${this._handleClick}">
-        ${this._config.current !== false ? this.renderCurrent(stateObj, lang) : ""}
-        ${this._config.details !== false ? this.renderDetails(stateObj, lang) : ""}
+        ${this._config.current !== false ? this.renderCurrent(stateObj) : ""}
+        ${this._config.details !== false ? this.renderDetails(stateObj) : ""}
         ${this._config.forecast !== false
-          ? this.renderForecast(stateObj.attributes.forecast, lang)
+          ? this.renderForecast(stateObj.attributes.forecast)
           : ""}
       </ha-card>
     `;
@@ -175,21 +191,22 @@ class WeatherCard extends LitElement {
     `;
   }
 
-  renderDetails(stateObj, lang) {
+  renderDetails(stateObj) {
     this.numberElements++;
 
-    if (stateObj.attributes.humidity !== null && !this._config.hide_humidity) {
+    const items = [];
+
+    if (stateObj.attributes.humidity != null) {
       items.push(html`
         <ha-icon icon="mdi:water-percent"></ha-icon>
-        ${stateObj.attributes.humidity}
-        <span class="unit"> % </span>
+        ${stateObj.attributes.humidity}<span class="unit"> % </span>
       `);
     }
 
-    if (stateObj.attributes.wind_speed !== null && !this._config.hide_wind) {
+    if (stateObj.attributes.wind_speed != null) {
       items.push(html`
         <ha-icon icon="mdi:weather-windy"></ha-icon>
-        ${stateObj.attributes.wind_bearing !== null
+        ${stateObj.attributes.wind_bearing != null
           ? windDirections[
               parseInt((stateObj.attributes.wind_bearing + 11.25) / 22.5)
             ]
@@ -200,32 +217,25 @@ class WeatherCard extends LitElement {
       `);
     }
 
-    if (stateObj.attributes.pressure !== null && !this._config.hide_pressure) {
+    if (stateObj.attributes.pressure != null && !this._config.hide_pressure) {
       items.push(html`
         <ha-icon icon="mdi:gauge"></ha-icon>
-        ${stateObj.attributes.pressure}
+        ${stateObj.attributes.wind_speed}
         <span class="unit"> ${this.getUnit("air_pressure")} </span>
       `);
     }
 
-    if (stateObj.attributes.visibility !== null && !this._config.hide_visibility) {
+    if (stateObj.attributes.visibility != null && !this._config.hide_visibility) {
       items.push(html`
-        <ha-icon icon="mdi:weather-fog"></ha-icon>
-        ${stateObj.attributes.visibility}
-        <span class="unit"> ${this.getUnit("length")} </span>
+        <ha-icon icon="mdi:weather-fog"></ha-icon> ${stateObj.attributes
+          .visibility}<span class="unit"> ${this.getUnit("length")} </span>
       `);
     }
 
     const sun = this.hass.states['sun.sun'];
-    if (sun && !this._config.hide_sunrise_sunset) {
-      const next_rising = new Date(sun.attributes.next_rising).toLocaleTimeString(lang, {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-      const next_setting = new Date(sun.attributes.next_setting).toLocaleTimeString(lang, {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
+    if (sun) {
+      const next_rising = new Date(sun.attributes.next_rising);
+      const next_setting = new Date(sun.attributes.next_setting);
 
       if (items.length % 2 == 1) {
         items.push(html`<div />`);
@@ -233,11 +243,11 @@ class WeatherCard extends LitElement {
 
       items.push(html`
         <ha-icon icon="mdi:weather-sunset-up"></ha-icon>
-        ${next_rising}
+        ${next_rising.toLocaleTimeString()}
       `);
       items.push(html`
         <ha-icon icon="mdi:weather-sunset-down"></ha-icon>
-        ${next_setting}
+        ${next_setting.toLocaleTimeString()}
       `);
     }
 
@@ -250,10 +260,12 @@ class WeatherCard extends LitElement {
     `;
   }
 
-  renderForecast(forecast, lang) {
+  renderForecast(forecast) {
     if (!forecast || forecast.length === 0) {
       return html``;
     }
+
+    const lang = this.hass.selectedLanguage || this.hass.language;
 
     this.numberElements++;
     return html`
@@ -294,14 +306,18 @@ class WeatherCard extends LitElement {
                       </div>
                     `
                   : ""}
-                ${!this._config.hide_precipitation && daily.precipitation !== undefined && daily.precipitation !== null
+                ${!this._config.hide_precipitation &&
+                daily.precipitation !== undefined &&
+                daily.precipitation !== null
                   ? html`
                       <div class="precipitation">
                         ${Math.round(daily.precipitation*10)/10} ${this.getUnit("precipitation")}
                       </div>
                     `
                   : ""}
-                ${(!this._config.hide_precipitation || !this._config.hide_precipitation_probability) && daily.precipitation_probability !== undefined && daily.precipitation_probability !== null
+                ${!this._config.hide_precipitation &&
+                daily.precipitation_probability !== undefined &&
+                daily.precipitation_probability !== null
                   ? html`
                       <div class="precipitation_probability">
                         ${Math.round(daily.precipitation_probability)} ${this.getUnit("precipitation_probability")}
@@ -319,7 +335,7 @@ class WeatherCard extends LitElement {
     return `${
       this._config.icons
         ? this._config.icons
-        : "/local/community/weather-card/icons/"
+        : "https://cdn.jsdelivr.net/gh/bramkragten/weather-card/dist/icons/"
     }${
       sun && sun.state == "below_horizon"
         ? weatherIconsNight[condition]
