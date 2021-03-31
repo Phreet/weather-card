@@ -16,6 +16,7 @@ const weatherIcons = {
 const weatherIconsDay = {
   ...weatherIcons,
   clear: "clear-day",
+  "clear-day": "clear-day",
   sunny: "clear-day",
   overcast: "overcast-day",
   fog: "fog-day",
@@ -28,6 +29,7 @@ const weatherIconsDay = {
 const weatherIconsNight = {
   ...weatherIcons,
   clear: "clear-night",
+  "clear-night": "clear-night",
   sunny: "clear-night",
   overcast: "overcast-night",
   fog: "fog-night",
@@ -63,7 +65,7 @@ window.customCards.push({
   name: "Weather Card",
   description: "🌧 Customizable weather card with animated icons",
   preview: true,
-  documentationURL: "https://github.com/Ph/weather-card",
+  documentationURL: "https://github.com/Phreet/weather-card",
 });
 
 const fireEvent = (node, type, detail, options) => {
@@ -139,18 +141,9 @@ class WeatherCard extends LitElement {
 
     if (!stateObj) {
       return html`
-        <style>
-          .not-found {
-            flex: 1;
-            background-color: yellow;
-            padding: 8px;
-          }
-        </style>
-        <ha-card>
-          <div class="not-found">
-            Entity not available: ${this._config.entity}
-          </div>
-        </ha-card>
+        <hui-warning>
+          Entity not available: ${this._config.entity}
+        </hui-warning>
       `;
     }
 
@@ -220,7 +213,7 @@ class WeatherCard extends LitElement {
     if (stateObj.attributes.pressure != null && !this._config.hide_pressure) {
       items.push(html`
         <ha-icon icon="mdi:gauge"></ha-icon>
-        ${stateObj.attributes.wind_speed}
+        ${stateObj.attributes.pressure}
         <span class="unit"> ${this.getUnit("air_pressure")} </span>
       `);
     }
@@ -306,18 +299,14 @@ class WeatherCard extends LitElement {
                       </div>
                     `
                   : ""}
-                ${!this._config.hide_precipitation &&
-                daily.precipitation !== undefined &&
-                daily.precipitation !== null
+                ${!this._config.hide_precipitation && daily.precipitation !== undefined && daily.precipitation !== null
                   ? html`
                       <div class="precipitation">
                         ${Math.round(daily.precipitation*10)/10} ${this.getUnit("precipitation")}
                       </div>
                     `
                   : ""}
-                ${!this._config.hide_precipitation &&
-                daily.precipitation_probability !== undefined &&
-                daily.precipitation_probability !== null
+                ${!this._config.hide_precipitation && daily.precipitation_probability !== undefined && daily.precipitation_probability !== null
                   ? html`
                       <div class="precipitation_probability">
                         ${Math.round(daily.precipitation_probability)} ${this.getUnit("precipitation_probability")}
@@ -333,13 +322,9 @@ class WeatherCard extends LitElement {
 
   getWeatherIcon(condition, sun) {
     return `${
-      this._config.icons
-        ? this._config.icons
-        : "https://cdn.jsdelivr.net/gh/bramkragten/weather-card/dist/icons/"
+      this._config.icons ? this._config.icons : "/local/community/weather-card/icons/"
     }${
-      sun && sun.state == "below_horizon"
-        ? weatherIconsNight[condition]
-        : weatherIconsDay[condition]
+      sun && sun.state == "below_horizon" ? weatherIconsNight[condition] : weatherIconsDay[condition]
     }.svg`;
   }
 
