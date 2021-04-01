@@ -27,7 +27,7 @@ const weatherIconsDay = {
 };
 
 const weatherIconsNight = {
-  ...weatherIcons,
+  ...weatherIcons, 
   clear: "clear-night",
   "clear-night": "clear-night",
   sunny: "clear-night",
@@ -86,15 +86,6 @@ function hasConfigOrEntityChanged(element, changedProps) {
     return true;
   }
 
-  const oldHass = changedProps.get("hass");
-  if (oldHass) {
-    return (
-      oldHass.states[element._config.entity] !==
-        element.hass.states[element._config.entity] ||
-      oldHass.states["sun.sun"] !== element.hass.states["sun.sun"]
-    );
-  }
-
   return true;
 }
 
@@ -151,9 +142,7 @@ class WeatherCard extends LitElement {
       <ha-card @click="${this._handleClick}">
         ${this._config.current !== false ? this.renderCurrent(stateObj) : ""}
         ${this._config.details !== false ? this.renderDetails(stateObj) : ""}
-        ${this._config.forecast !== false
-          ? this.renderForecast(stateObj.attributes.forecast)
-          : ""}
+        ${this._config.forecast !== false ? this.renderForecast(stateObj.attributes.forecast) : ""}
       </ha-card>
     `;
   }
@@ -322,7 +311,7 @@ class WeatherCard extends LitElement {
 
   getWeatherIcon(condition, sun) {
     return `${
-      this._config.icons ? this._config.icons : "/local/community/weather-card/icons/"
+      this._config.icons ? this._config.icons : "./icons/"
     }${
       sun && sun.state == "below_horizon" ? weatherIconsNight[condition] : weatherIconsDay[condition]
     }.svg`;
@@ -466,12 +455,12 @@ class WeatherCard extends LitElement {
         text-align: center;
         color: var(--primary-text-color);
         border-right: 0.1em solid #d9d9d9;
-        line-height: 2;
+        line-height: 1;
         box-sizing: border-box;
       }
 
       .dayname {
-        text-transform: uppercase;
+        text-transform: none;
       }
 
       .forecast .day:first-child {
@@ -494,20 +483,22 @@ class WeatherCard extends LitElement {
       .precipitation {
         color: var(--primary-text-color);
         font-weight: 300;
+        margin-top: 5px;
       }
 
       .icon.bigger {
-        width: 10em;
-        height: 10em;
-        margin-top: -4em;
+        width: 8em;
+        height: 8em;
+        margin-top: -35px;
+        left: 10px
         position: absolute;
-        left: 0em;
       }
 
       .icon {
-        width: 50px;
-        height: 50px;
-        margin-right: 5px;
+        width: 45px;
+        height: 45px;
+        margin-top: 5px;
+        margin-bottom: 5px;
         display: inline-block;
         vertical-align: middle;
         background-size: contain;
