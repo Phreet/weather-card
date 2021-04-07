@@ -4,19 +4,24 @@ const css = LitElement.prototype.css;
 
 const weatherIcons = {
   cloudy: "cloudy",
-  hail: "hail",
-  pouring: "rain",
   drizzle: "drizzle",
+  hail: "hail",
+  mist: "mist",
+  pouring: "rain",
+  snow: "snow",
   snowy: "snow",
   "snowy-rainy": "sleet",
   windy: "wind",
-  "windy-variant": "overcast"
+  "windy-variant": "overcast",
+  rain: "rain",
+  sleet: "sleet"
 }
 
 const weatherIconsDay = {
   ...weatherIcons,
   clear: "clear-day",
   "clear-day": "clear-day",
+  "clear-sky": "clear-day",
   sunny: "clear-day",
   overcast: "overcast-day",
   fog: "fog-day",
@@ -30,6 +35,7 @@ const weatherIconsNight = {
   ...weatherIcons, 
   clear: "clear-night",
   "clear-night": "clear-night",
+  "clear-sky": "clear-night",
   sunny: "clear-night",
   overcast: "overcast-night",
   fog: "fog-night",
@@ -404,7 +410,7 @@ class WeatherCard extends LitElement {
 
       .current {
         padding: 1.2em 0;
-        margin-bottom: 3.5em;
+        margin-bottom: -30px;
       }
 
       .variations {
