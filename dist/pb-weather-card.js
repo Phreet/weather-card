@@ -67,9 +67,9 @@ const windDirections = [
 
 window.customCards = window.customCards || [];
 window.customCards.push({
-  type: "weather-card",
-  name: "Weather Card",
-  description: "🌧 Customizable weather card with animated icons",
+  type: "pb-weather-card",
+  name: "PB - Weather Card",
+  description: "Customizable weather card with animated icons",
   preview: true,
   documentationURL: "https://github.com/Phreet/weather-card",
 });
@@ -104,8 +104,8 @@ class WeatherCard extends LitElement {
   }
 
   static async getConfigElement() {
-    await import("./weather-card-editor.js");
-    return document.createElement("weather-card-editor");
+    await import("./pb-weather-card-editor.js");
+    return document.createElement("pb-weather-card-editor");
   }
 
   static getStubConfig(hass, unusedEntities, allEntities) {
@@ -527,4 +527,4 @@ class WeatherCard extends LitElement {
     `;
   }
 }
-customElements.define("weather-card", WeatherCard);
+customElements.define("pb-weather-card", WeatherCard);

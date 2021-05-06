@@ -1,6 +1,6 @@
-# Animated weather card
+# PB - Weather card
 
-Originally created for the [old UI](https://community.home-assistant.io/t/custom-ui-weather-state-card-with-a-question/23008) converted by @arsaboo and @ciotlosm to [Lovelace](https://community.home-assistant.io/t/custom-ui-weather-state-card-with-a-question/23008/291) and now converted to Lit to make it even better.
+Originally created for the [old UI](https://community.home-assistant.io/t/custom-ui-weather-state-card-with-a-question/23008) converted by @arsaboo and @ciotlosm to [Lovelace](https://community.home-assistant.io/t/custom-ui-weather-state-card-with-a-question/23008/291) and now converted to Lit to make it even better. In latest addition, renamed to PB - Weather card and updated with new animations.
 
 This card uses the awesome [animated SVG weather icons by amCharts](https://www.amcharts.com/free-animated-svg-weather-icons/).
 
@@ -8,10 +8,10 @@ This card uses the awesome [animated SVG weather icons by amCharts](https://www.
 
 ## Configuration
 
-And add a card with type `custom:weather-card`:
+And add a card with type `custom:pb-weather-card`:
 
 ```yaml
-type: custom:weather-card
+type: custom:pb-weather-card
 entity: weather.yourweatherentity
 name: Optional name
 ```
@@ -25,7 +25,7 @@ The 3 different rows, being:
 - The X day forecast or hourly forecast
 
 ```yaml
-type: custom:weather-card
+type: custom:pb-weather-card
 entity: weather.yourweatherentity
 name: Optional name
 current: true
